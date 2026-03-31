@@ -1,5 +1,21 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+    "extends": "astro/tsconfigs/base",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "strictNullChecks": true,
+        "paths": {
+            "@components/*": [
+                "src/components/*"
+            ],
+            "@templates/*": [
+                "src/templates/*"
+            ],
+            "@blocks/*": [
+                "src/blocks/*"
+            ],
+            "@img/*": [
+                "public/img/*"
+            ]
+        }
+    }
 }

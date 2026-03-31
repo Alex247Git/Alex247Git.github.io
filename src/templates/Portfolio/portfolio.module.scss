@@ -1,0 +1,30 @@
+@use 'webcoreui/config' as *;
+
+button.cta {
+    @include visibility(block);
+    @include spacing(auto-none);
+    @include size(wfit-content);
+}
+
+.title {
+    @include typography(center);
+}
+
+.img {
+    @include spacing(auto-none);
+    @include size('w100%');
+}
+
+.me {
+    [data-hidden="true"] {
+        @include visibility(none);
+    }
+}
+
+.about {
+    @include typography(hlg);
+}
+
+.ratings {
+    @include spacing(p0);
+}

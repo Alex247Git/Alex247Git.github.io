@@ -1,0 +1,159 @@
+---
+import type { PortfolioProps } from './portfolio'
+
+import BlogCard from '@blocks/BlogCard/BlogCard.astro'
+import Button from '@blocks/Button/Button.astro'
+import GridWithIcons from '@blocks/GridWithIcons/GridWithIcons.astro'
+import Hero from '@blocks/Hero/Hero.astro'
+import IconList from '@blocks/IconList/IconList.astro'
+import Layout from '@blocks/Layout/Layout.astro'
+
+import styles from './portfolio.module.scss'
+
+import { ConditionalWrapper, Rating } from 'webcoreui/astro'
+
+interface Props extends PortfolioProps {}
+
+const {
+    layout,
+    hero,
+    aboutMe,
+    ratings,
+    ratingsOnCta,
+    ratingsOffCta,
+    hideRatingsAfter = 3,
+    myWork,
+    servicesTitle,
+    services,
+    servicesCta,
+    ...rest
+} = Astro.props
+
+---
+
+<Layout {...layout} {...rest} containerClassName="container flex column">
+    {Astro.slots.has('menu') && (
+        <div slot="menu">
+            <slot name="menu" />
+        </div>
+    )}
+
+    {hero && <Hero {...hero} />}
+
+    <section class={styles.me}>
+        <h2 class={styles.title}>{aboutMe.title || 'About Me'}</h2>
+        <ConditionalWrapper condition={!!(aboutMe.img?.src || aboutMe.services?.length)}>
+            <div slot="wrapper" class="flex column md-row">children</div>
+            {aboutMe.img?.src && (
+                <img
+                    src={aboutMe.img.src}
+                    alt={aboutMe.img.alt}
+                    width={aboutMe.img.width}
+                    height={aboutMe.img.height}
+                    class={styles.img}
+                />
+            )}
+            <ConditionalWrapper condition={!!(aboutMe.text && aboutMe.services?.length)}>
+                <div slot="wrapper" class="flex column">children</div>
+                <div class={styles.about}>
+                    <Fragment set:html={aboutMe.text} />
+                </div>
+                {aboutMe.services?.length && (
+                    <IconList items={aboutMe.services} columns={2} />
+                )}
+            </ConditionalWrapper>
+        </ConditionalWrapper>
+
+        {ratings?.length && (
+            <Fragment>
+                <ul class:list={[styles.ratings, 'grid sm-3 items-start']} data-id="w-portfolio-ratings">
+                    {ratings.map((rating, index) => (
+                        <li class="grid xs" data-hidden={index >= hideRatingsAfter ? 'true' : null}>
+                            <Rating {...(({ feedback, ...rest }) => rest)(rating)} />
+                            <span class="muted">
+                                <Fragment set:html={rating.feedback} />
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+
+                {ratings.length > hideRatingsAfter && (
+                    <Button
+                        text="More reviews"
+                        {...ratingsOnCta}
+                        className={styles.cta}
+                        data-id="w-portfolio-ratings-on"
+                    />
+                    <Button
+                        text="Less reviews"
+                        {...ratingsOffCta}
+                        className={styles.cta}
+                        data-id="w-portfolio-ratings-off"
+                        data-hidden="true"
+                    />
+                )}
+            </Fragment>
+        )}
+    </section>
+
+    {myWork?.items?.length && (
+        <section>
+            <h2 class={styles.title}>{myWork.title || 'My Work'}</h2>
+            <div class="grid sm-2 md-3">
+                {myWork.items.map(item => (
+                    <BlogCard {...item} />
+                ))}
+            </div>
+        </section>
+    )}
+
+    {services?.items?.length && (
+        <section>
+            <h2 class={styles.title}>{servicesTitle || 'Services'}</h2>
+            <GridWithIcons {...services} />
+        </section>
+    )}
+
+    {servicesCta?.text && (
+        <Button {...servicesCta} className={styles.cta} />
+    )}
+</Layout>
+
+<script>
+    import { get, on } from 'webcoreui'
+
+    const addEventListeners = () => {
+        const toggleOn = get('[data-id="w-portfolio-ratings-on"]')
+        const toggleOff = get('[data-id="w-portfolio-ratings-off"]')
+        const ratings = get('[data-id="w-portfolio-ratings"] li', true) as NodeListOf<HTMLElement>
+
+        const toggleRatings = () => {
+            if (ratings) {
+                Array.from(ratings).forEach((rating) => {
+                    if (rating.dataset.hidden) {
+                        rating.dataset.hidden = rating.dataset.hidden === 'true' ? 'false' : 'true'
+                    }
+                })
+            }
+        }
+
+        if (toggleOn instanceof HTMLButtonElement && toggleOff instanceof HTMLButtonElement) {
+            on(toggleOn, 'click', () => {
+                toggleOn.dataset.hidden = 'true'
+                toggleOff.dataset.hidden = 'false'
+
+                toggleRatings()
+            })
+
+            on(toggleOff, 'click', () => {
+                toggleOff.dataset.hidden = 'true'
+                toggleOn.dataset.hidden = 'false'
+
+                toggleRatings()
+            })
+        }
+    }
+
+    on(document, 'astro:after-swap', addEventListeners)
+    addEventListeners()
+</script>

@@ -1,46 +1,24 @@
-# Astro Starter Kit: Basics
+# Webcore Astro Starter Project
 
-```sh
-npm create astro@latest -- --template basics
+- For more information on how to use Webcore, visit the [documentation](https://webcoreui.dev/).
+- For Astro integration steps, visit the [Astro docs](https://webcoreui.dev/docs/astro).
+
+## Getting Started
+
+Make sure that you have [Node.js](https://nodejs.org/en) installed. Run the following command to install all dependencies:
+
+```
+npm i
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+After installing dependencies, run the following command to start your dev server:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```
+npm run dev
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+To build the project, run the following command:
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```
+npm run build
+```
