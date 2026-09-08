@@ -38,6 +38,12 @@ const {
         </div>
     )}
 
+    {Astro.slots.has('footer') && (
+        <div slot="footer">
+            <slot name="footer" />
+        </div>
+    )}
+
     {hero && <Hero {...hero} />}
 
     <section class={styles.me}>

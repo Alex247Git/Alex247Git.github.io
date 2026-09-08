@@ -1,188 +1,139 @@
 ---
-import logo from '@img/logo.svg?raw'
-
 import type { PortfolioProps } from '@templates/Portfolio/portfolio'
 import Portfolio from '@templates/Portfolio/Portfolio.astro'
 
 // Your layout, including menu and footer
 const layout: PortfolioProps['layout'] = {
     seo: {
-        title: 'Portfolio Template - Webcore',
-        url: 'https://webcoreui.dev/',
-        description: 'A customizable and easy to use template for portfolios.',
-        faviconUrl: '/logo.svg'
+        title: 'Alex | Software Engineer Portfolio',
+        url: 'https://Alex247Git.github.io/',
+        description: 'Software Engineer specializing in modern web development.',
+        faviconUrl: '/logo.svg' 
     },
     menu: {
         logo: {
-            html: logo
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'
         }
     },
-    footer: {
-        logo: {
-            html: logo
-        },
-        columns: [
-            {
-                title: 'Contacts',
-                items: [
-                    { href: 'mailto:josh@example.com', name: 'john@example.com' },
-                    { href: 'tel:+1 234 5678', name: '+1 234 5678' }
-                ]
-            }
-        ]
-    }
+    // Empty config: footer content is provided via the "footer" slot below
+    footer: {}
 }
 
 // Your hero section
 const hero: PortfolioProps['hero'] = {
-    heading: 'Hey, I\'m Josh 👋',
-    subHeading: 'Senior React Developer based in Oregon',
-    buttons: [
-        { text: 'Call Me', theme: 'success' },
-        { text: 'Send an Email', theme: 'outline' }
-    ],
-    badge: {
-        transparent: true,
-        theme: 'warning',
-        text: '⭐ Top rated developer'
-    },
-    img: {
-        src: '/img/placeholder-hd1.png',
-        alt: 'Banner',
-        width: 500,
-        height: 300
-    }
+    heading: 'Hey, I\'m Alex 👋',
+    subHeading: 'Software Engineer • Tech Enthusiast'
 }
 
-// Your "About Me" section
 const aboutMe: PortfolioProps['aboutMe'] = {
-    title: 'More About Me',
-    text: 'Description about the person, including previous work experiences, studies, and relevant projects. Anything that can establish credibility, experience, and expertise should be listed here to instill trustworthiness in the visitor. This field can also handle <code>HTML</code> tags for further formatting.',
-    img: {
-        src: '/img/avatar0-hd.png',
-        alt: 'About me',
-        width: 250,
-        height: 250
-    },
+    title: 'Skills',
+    text: `Passionate Software Engineer with experience in full-stack web development and a strong foundation in multiple programming languages. I love building interactive and user-friendly applications.`,
     services: [
-        'List of services provided by the person',
-        'Broken into two columns on larger screens',
-        'Define a list of ratings',
-        'Create CTAs between blocks',
-        'Add your previous work',
-        'Provide a list of services'
+        'Javascript (React & Node.js)',
+        'HTML & CSS',
+        'C',
+        'Python',
+        'Java',
+        'Git & GitHub Actions',
+        'UI/UX Design',
+        'SEO Optimization'
     ].map(feature => ({
         icon: 'circle-check',
-        color: 'var(--w-color-success)',
+        color: 'var(--w-color-primary)',
         text: feature
     }))
 }
 
-// Ratings under "About Me"
-const ratings: PortfolioProps['ratings'] = [
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for result',
-        feedback: '"He did an excellent job. The end result is what we wanted."'
-    },
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for design',
-        feedback: '"A thorough, reliable, precise professional who is demanding in his work! I can only recommend him!"'
-    },
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for communication',
-        feedback: '"Thank you for your work! It turned out very nice!"'
-    },
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for communication',
-        feedback: '"Very professional throughout the entire project and always delivered on time."'
-    },
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for design',
-        feedback: '"Quick to respond and always available to answer questions or make adjustments."'
-    },
-    {
-        score: 5,
-        showText: true,
-        text: 'Rated for result',
-        feedback: '"Clearly knowledgeable in his field and provided valuable insights beyond expectations."'
-    }
-]
-
-// Toggle on button for ratings
-const ratingsOnCta: PortfolioProps['ratingsOnCta'] = { theme: 'secondary' }
-
-// Toggle off button for ratings
-const ratingsOffCta: PortfolioProps['ratingsOffCta'] = { text: 'Show less', theme: 'secondary' }
-
-// Your work in a grid layout
 const myWork: PortfolioProps['myWork'] = {
-    title: 'My Most Recent Work',
-    items: Array
-        .from({ length: 3 }, (_, i) => i + 3)
-        .map(i => ({
-            href: '#',
+    title: 'My Projects',
+    items: [
+        {
+            href: 'https://github.com/Alex247Git/autonomous-firefighting-simulation',
             img: {
-                src: `/img/placeholder${i}.png`,
-                alt: 'img',
+                src: `/img/logo.svg`,
+                alt: 'Autonomous Firefighting Simulation',
                 width: 500,
                 height: 250
             },
-            title: `My Work #${i - 2}`,
-            text: 'You can also pass <b>HTML</b> tags to your cards.'
-        }))
-}
-
-// Your list of services
-const services: PortfolioProps['services'] = {
-    secondary: true,
-    items: [
+            title: 'Autonomous Python Firefighting Simulation',
+            text: 'An autonomous Python firefighting simulation project showcasing automated fire detection and extinguishing capabilities.'
+        },
         {
-            icon: 'info',
-            title: 'List of services',
-            text: 'Use the <code>GridWithIcons</code> block to organize your list into a grid with icons to enhance clarity and visual appeal.'
-        }, {
-            icon: 'alert',
-            title: 'Configurable',
-            text: 'You can create as many items as necessary with icons and an optional title. You can also configure the number of columns.'
-        }, {
-            icon: 'circle-check',
-            title: 'Supports formatting',
-            text: 'The <code>text</code> prop also supports formatting through <b>HTML</b> tags to help you customize the appearance of the element.'
-        }
+            href: 'https://github.com/Alex247Git/jobsearch',
+            img: {
+                src: `/img/logo.svg`,
+                alt: 'Job Search Platform',
+                width: 500,
+                height: 250
+            },
+            title: 'Job Search Platform',
+            text: 'A full-stack job search platform built with a React (MUI) frontend and an Express/MySQL backend, featuring JWT authentication, personalized job recommendations, real-time messaging and ratings.'
+        },
     ]
 }
 
-// Last CTA at the end of the portfolio
-const servicesCta: PortfolioProps['servicesCta'] = {
-    text: 'Call Me',
-    theme: 'success'
-}
 ---
 
 <Portfolio
     layout={layout}
     hero={hero}
     aboutMe={aboutMe}
-    ratings={ratings}
-    ratingsOnCta={ratingsOnCta}
-    ratingsOffCta={ratingsOffCta}
     myWork={myWork}
-    services={services}
-    servicesCta={servicesCta}
 >
     <div slot="menu">
-        <a href="tel:+1 234 5678">+1 234 5678</a>
-        <span>•</span>
-        <a href="mailto:josh@example.com">josh@example.com</a>
+        <a href="https://github.com/Alex247Git" target="_blank">GitHub</a>
+    </div>
+    <div slot="footer">
+        <p style="text-align: center; margin: 0; padding: 1rem 0; font-size: 0.875rem; opacity: 0.7;">
+            © 2026 Alex. All rights reserved. | Created by <a href="https://github.com/Alex247Git" target="_blank" style="color: var(--w-color-primary, #4176FF); text-decoration: none; font-weight: 600;">Alex</a>
+        </p>
     </div>
 </Portfolio>
+
+<style is:global>
+    /* Center all content */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    /* Center text in sections */
+    main section {
+        text-align: center;
+    }
+
+    /* Center the About Me section */
+    section .me {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Hero center */
+    section > :first-child {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* Extra top spacing for hero */
+    section:first-of-type {
+        padding-top: 6rem;
+    }
+
+    /* Extra bottom spacing before footer */
+    section:last-of-type {
+        padding-bottom: 4rem;
+    }
+
+    /* Footer slot styling */
+    [slot="footer"] {
+        background: rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem 0;
+    }
+</style>
