@@ -105,7 +105,7 @@ const {
     {myWork?.items?.length && (
         <section>
             <h2 class={styles.title}>{myWork.title || 'My Work'}</h2>
-            <div class="grid sm-2 md-3">
+            <div class="grid sm-2">
                 {myWork.items.map(item => (
                     <BlogCard {...item} />
                 ))}
