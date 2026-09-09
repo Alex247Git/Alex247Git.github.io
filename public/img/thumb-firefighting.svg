@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="250" viewBox="0 0 500 250" role="img" aria-label="Autonomous Firefighting Simulation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c0d06"/>
+      <stop offset="0.55" stop-color="#0d0705"/>
+      <stop offset="1" stop-color="#000000"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd166"/>
+      <stop offset="0.5" stop-color="#ff7a2f"/>
+      <stop offset="1" stop-color="#e8402a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#ff7a2f" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ff7a2f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="500" height="250" fill="url(#bg)"/>
+  <rect width="500" height="250" fill="url(#glow)"/>
+
+  <g transform="translate(250 92)">
+    <path fill="url(#flame)" d="M0 34 C-15 34 -26 24 -26 10 C-26 -4 -17 -11 -10 -22 C-8 -15 -4 -12 0 -9 C3 -18 8 -23 6 -34 C18 -24 26 -6 26 10 C26 24 15 34 0 34 Z"/>
+    <path fill="#ffd166" opacity="0.95" d="M0 26 C-7 26 -12 20 -12 13 C-12 7 -7 3 0 -5 C7 3 12 7 12 13 C12 20 7 26 0 26 Z"/>
+  </g>
+
+  <text x="250" y="172" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" fill="#FFFFFF">Autonomous Firefighting Simulation</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" text-anchor="middle">
+    <rect x="113" y="196" width="86" height="30" rx="15" fill="#ff7a2f" fill-opacity="0.08" stroke="#ff7a2f" stroke-opacity="0.55"/>
+    <text x="156" y="215" fill="#ffb07a">Python</text>
+
+    <rect x="213" y="196" width="74" height="30" rx="15" fill="#ff7a2f" fill-opacity="0.08" stroke="#ff7a2f" stroke-opacity="0.55"/>
+    <text x="250" y="215" fill="#ffb07a">Mesa</text>
+
+    <rect x="301" y="196" width="86" height="30" rx="15" fill="#ff7a2f" fill-opacity="0.08" stroke="#ff7a2f" stroke-opacity="0.55"/>
+    <text x="344" y="215" fill="#ffb07a">Solara</text>
+  </g>
+</svg>
