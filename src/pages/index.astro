@@ -104,6 +104,59 @@ const myWork: PortfolioProps['myWork'] = {
     </div>
 </Portfolio>
 
+<!-- About Section -->
+<section class="about-section">
+    <h2>About Me</h2>
+    <p class="about-text">
+        I'm a Software Engineer from Greece with a passion for building full-stack web applications 
+        and solving complex problems. I specialize in modern JavaScript (React, Node.js) and Python, 
+        with experience in machine learning, data visualization, and cloud-native development.
+    </p>
+    <p class="about-text">
+        Currently open to <strong>full-stack</strong> and <strong>software engineering roles</strong> — 
+        remote or hybrid (Greece / EU). I thrive in collaborative environments where I can contribute 
+        to meaningful products while growing as an engineer.
+    </p>
+    <div class="metrics-grid">
+        <div class="metric">
+            <span class="metric-number">34</span>
+            <span class="metric-label">Tests</span>
+        </div>
+        <div class="metric">
+            <span class="metric-number">0</span>
+            <span class="metric-label">Vulnerabilities</span>
+        </div>
+        <div class="metric">
+            <span class="metric-number">3</span>
+            <span class="metric-label">Projects</span>
+        </div>
+        <div class="metric">
+            <span class="metric-number">CI</span>
+            <span class="metric-label">Green</span>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section">
+    <h2>📬 Let's Connect</h2>
+    <p class="contact-blurb">
+        I'm currently open to full-stack and software engineering roles — remote or
+        hybrid (Greece / EU). If you'd like to talk about a role, a project, or just
+        tech in general, my inbox is always open.
+    </p>
+    <div class="contact-links">
+        <a href="mailto:AlexAdamos247@gmail.com" class="contact-link">
+            ✉️ Email
+        </a>
+        <a href="https://www.linkedin.com/in/alexandros-adamos-227961331/" target="_blank" class="contact-link">
+            💼 LinkedIn
+        </a>
+        <a href="https://github.com/Alex247Git" target="_blank" class="contact-link">
+            🐙 GitHub
+        </a>
+    </div>
+</section>
+
 <style>
     .footer-credit {
         text-align: center;
@@ -117,6 +170,100 @@ const myWork: PortfolioProps['myWork'] = {
         color: var(--w-color-primary);
         text-decoration: none;
         font-weight: 600;
+    }
+
+    /* About section */
+    .about-section {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .about-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-text {
+        max-width: 45rem;
+        margin: 0 auto 1rem;
+        opacity: 0.85;
+        line-height: 1.6;
+    }
+
+    .metrics-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .metric {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        min-width: 80px;
+    }
+
+    .metric-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--w-color-primary);
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        margin-top: 0.25rem;
+    }
+
+    /* Contact section */
+    .contact-section {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 3rem 2rem 4rem;
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .contact-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .contact-blurb {
+        max-width: 40rem;
+        margin: 0 auto 1.75rem;
+        opacity: 0.85;
+        line-height: 1.6;
+    }
+
+    .contact-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .contact-link {
+        display: inline-block;
+        padding: 0.6rem 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .contact-link:hover {
+        border-color: var(--w-color-primary);
+        background: rgba(255, 255, 255, 0.05);
     }
 </style>
 
