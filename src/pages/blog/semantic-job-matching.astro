@@ -1,0 +1,238 @@
+---
+import type { LayoutProps } from '@blocks/Layout/layout'
+import Layout from '@blocks/Layout/Layout.astro'
+
+const layout: LayoutProps = {
+    seo: {
+        title: 'Building Local Semantic Job Matching with ONNX + Transformers | Alex',
+        url: 'https://Alex247Git.github.io/blog/semantic-job-matching/',
+        description: 'How I built privacy-first, zero-cost semantic job matching using sentence-transformers running locally on ONNX Runtime — no API keys, no per-request costs.',
+        faviconUrl: '/logo.svg'
+    },
+    menu: {
+        logo: {
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'
+        }
+    },
+    footer: {
+        className: 'site-footer'
+    }
+}
+---
+
+<Layout {...layout}>
+    <div slot="menu">
+        <a href="/">Home</a>
+        <a href="https://github.com/Alex247Git/jobsearch" target="_blank">JobSearch repo</a>
+        <a href="https://github.com/Alex247Git" target="_blank">GitHub</a>
+    </div>
+
+    <article class="post">
+        <p class="post-meta">Sprint notes · Node.js · Machine Learning · ~6 min read</p>
+        <h1>Building local semantic job matching with ONNX + transformers</h1>
+
+        <p class="lede">
+            Most "AI job matching" features you see are a wrapper around an LLM API: send the
+            resume, pay per token, hope the response is parseable. For my
+            <a href="https://github.com/Alex247Git/jobsearch" target="_blank">JobSearch platform</a>,
+            I wanted matching that runs <strong>locally</strong> — no API keys, no per-request
+            costs, no user data leaving the server. Here's how it works.
+        </p>
+
+        <h2>The model: a 90MB sentence-transformer</h2>
+        <p>
+            I use <code>Xenova/all-MiniLM-L6-v2</code> through
+            <code>@huggingface/transformers</code>, which runs the model on
+            <strong>ONNX Runtime</strong> in-process with the Node.js API. It converts any text —
+            a candidate profile, a job posting — into a 384-dimensional embedding vector where
+            <em>distance means semantic similarity</em>. "Frontend developer with React" lands
+            close to "UI engineer, 3 years of React experience", even though the strings share
+            almost nothing.
+        <h2>From profile to comparable vector</h2>
+        <p>
+            Raw DB rows aren't text models can reason about, so every record goes through a
+            composition step that flattens structured fields into one consistent sentence:
+        </p>
+        <pre><code>Title: Senior Frontend Dev
+Description: Build React dashboards...
+Skills: React, TypeScript
+Education: BSc Computer Science
+Certifications: AWS CCP
+Languages: English, Greek
+Job Type: Full-time
+Location: Athens
+Salary: 45k
+Remote Option: Hybrid</code></pre>
+        <p>
+            Both sides of the market — candidate profiles and job postings — use the same
+            composition, then get embedded with <em>mean pooling</em> and L2 normalization in a
+            single batched pass. Batch-embedding both collections at once mattered: it cut a
+            full regeneration run from minutes to seconds.
+        </p>
+
+        <h2>Scoring: cosine similarity with a floor</h2>
+        <p>
+            Because the vectors are normalized, similarity is just a dot product — but raw
+            cosine scores are hard to present: unrelated pairs don't score 0, they score
+            0.1–0.3. So I apply a <strong>threshold-and-rescale</strong>:
+        </p>
+        <pre><code>function normalizeScore(score, threshold = 0.5) &#123;
+    if (score &amp;lt; threshold) return 0;          // hard floor: unrelated pairs vanish
+    const scaled = ((score - threshold) / (1 - threshold)) * 10;
+    return Math.min(Math.max(scaled, 0), 10); // clamp to 0&#8211;10
+&#125;</code></pre>
+        <p>
+            Below 0.5 cosine similarity → 0. Above it, the remaining band is stretched onto
+            0–10. A smoke test with a frontend resume against a frontend job scores
+            <strong>1.78/10</strong>, while an unrelated candidate scores <strong>0.15 → 0</strong>.
+            The gap between "vaguely related" and "actually relevant" becomes visible to users.
+        </p>
+
+        <h2>The pipeline</h2>
+        <pre><code>trigger (startup / profile update / daily 3AM / manual endpoint)
+   → read candidates + jobs from MySQL
+   → composeText() both sides
+   → batched MiniLM embedding (local ONNX)
+   → cosine similarity matrix
+   → normalizeScore 0–10
+   → upsert into `recommendations` (ON DUPLICATE KEY)
+   → served via REST to both candidate and employer views</code></pre>
+        <p>
+            Regeneration runs at server startup, on profile changes, and daily at 3 AM. An
+            admin can also force it with <code>POST /recommendations/generate</code>. Writes
+            are idempotent upserts, so a crashed run can't poison the table — the next run
+            simply overwrites it.
+        </p>
+
+        <h2>What bit me in production</h2>
+        <ul>
+            <li>
+                <strong>Native dependencies.</strong> The transformers stack pulls in
+                <code>sharp</code>/<code>onnxruntime-node</code>, whose prebuilt binaries caused
+                npm audit findings. I pinned safe versions via package <code>overrides</code> —
+                a good reminder that "pure JS" models still ship native code.
+            </li>
+            <li>
+                <strong>DB pool exhaustion.</strong> Running job recommendations immediately
+                followed by candidate recommendations starved the MySQL pool. A short
+                settle-delay plus retry-with-backoff per pass fixed it — the candidate pass is
+                marked non-critical and can fail without taking down the startup sequence.
+            </li>
+            <li>
+                <strong>Model cold start.</strong> First inference loads ~90MB of weights. I
+                initialize lazily on first use so the API doesn't block startup on it.
+            </li>
+        </ul>
+
+        <h2>Was it worth it?</h2>
+        <p>
+            For this scale, absolutely: zero marginal cost per match, full data privacy, and
+            deterministic behavior I can test. A 90MB local model covering the 80% case with
+            zero running cost is hard to beat for a self-contained platform — the moment you
+            need cross-lingual nuance or long-document reasoning, a hosted embedding API earns
+            its price.
+        </p>
+
+        <p class="post-cta">
+            The full implementation lives in the
+            <a href="https://github.com/Alex247Git/jobsearch" target="_blank">JobSearch repo</a>
+            — see <code>BackEnd/semanticMatcherNew.js</code> and
+            <code>BackEnd/services/recommendationService.js</code>.
+        </p>
+
+        <p><a href="/" class="back-link">← Back to portfolio</a></p>
+    </article>
+</Layout>
+
+<style>
+    .post {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+        text-align: left;
+        line-height: 1.7;
+    }
+
+    .post-meta {
+        font-size: 0.875rem;
+        opacity: 0.65;
+        margin-bottom: 0.5rem;
+    }
+
+    .post h1 {
+        font-size: 2rem;
+        line-height: 1.25;
+        margin-bottom: 1.25rem;
+    }
+
+    .lede {
+        font-size: 1.1rem;
+        opacity: 0.85;
+    }
+
+    .post h2 {
+        margin-top: 2.25rem;
+        font-size: 1.3rem;
+    }
+
+    .post pre {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 0.5rem;
+        padding: 1rem 1.25rem;
+        overflow-x: auto;
+        font-size: 0.875rem;
+        line-height: 1.55;
+    }
+
+    .post code {
+        font-family: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace;
+    }
+
+    .post :not(pre) > code {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 0.25rem;
+        padding: 0.1rem 0.35rem;
+        font-size: 0.875em;
+    }
+
+    .post a {
+        color: var(--w-color-primary);
+    }
+
+    .post-cta {
+        margin-top: 2rem;
+        padding: 1rem 1.25rem;
+        border-left: 3px solid var(--w-color-primary);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 2rem;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .footer-credit {
+        text-align: center;
+        margin: 0;
+        padding: 1rem 0;
+        font-size: 0.875rem;
+        opacity: 0.7;
+    }
+
+    .footer-credit a {
+        color: var(--w-color-primary);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .site-footer {
+        background: rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.5rem 0;
+    }
+</style>
+
