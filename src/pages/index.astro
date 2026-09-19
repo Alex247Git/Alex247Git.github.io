@@ -102,60 +102,62 @@ const myWork: PortfolioProps['myWork'] = {
             © 2026 Alex. All rights reserved. | Created by <a href="https://github.com/Alex247Git" target="_blank">Alex</a>
         </p>
     </div>
+
+    <div slot="above-footer">
+        <!-- About Section -->
+        <section class="about-section">
+            <h2>About Me</h2>
+            <p class="about-text">
+                I'm a Software Engineer from Greece with a passion for building full-stack web applications 
+                and solving complex problems. I specialize in modern JavaScript (React, Node.js) and Python, 
+                with experience in machine learning, data visualization, and cloud-native development.
+            </p>
+            <p class="about-text">
+                Currently open to <strong>full-stack</strong> and <strong>software engineering roles</strong> — 
+                remote or hybrid (Greece / EU). I thrive in collaborative environments where I can contribute 
+                to meaningful products while growing as an engineer.
+            </p>
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="metric-number">34</span>
+                    <span class="metric-label">Tests</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">0</span>
+                    <span class="metric-label">Vulnerabilities</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">3</span>
+                    <span class="metric-label">Projects</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-number">CI</span>
+                    <span class="metric-label">Green</span>
+                </div>
+            </div>
+            </section>
+
+            <section class="contact-section">
+            <h2>📬 Let's Connect</h2>
+            <p class="contact-blurb">
+                I'm currently open to full-stack and software engineering roles — remote or
+                hybrid (Greece / EU). If you'd like to talk about a role, a project, or just
+                tech in general, my inbox is always open.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:AlexAdamos247@gmail.com" class="contact-link">
+                    ✉️ Email
+                </a>
+                <a href="https://www.linkedin.com/in/alexandros-adamos-227961331/" target="_blank" class="contact-link">
+                    💼 LinkedIn
+                </a>
+                <a href="https://github.com/Alex247Git" target="_blank" class="contact-link">
+                    🐙 GitHub
+                </a>
+            </div>
+        </section>
+    </div>
 </Portfolio>
-
-<!-- About Section -->
-<section class="about-section">
-    <h2>About Me</h2>
-    <p class="about-text">
-        I'm a Software Engineer from Greece with a passion for building full-stack web applications 
-        and solving complex problems. I specialize in modern JavaScript (React, Node.js) and Python, 
-        with experience in machine learning, data visualization, and cloud-native development.
-    </p>
-    <p class="about-text">
-        Currently open to <strong>full-stack</strong> and <strong>software engineering roles</strong> — 
-        remote or hybrid (Greece / EU). I thrive in collaborative environments where I can contribute 
-        to meaningful products while growing as an engineer.
-    </p>
-    <div class="metrics-grid">
-        <div class="metric">
-            <span class="metric-number">34</span>
-            <span class="metric-label">Tests</span>
-        </div>
-        <div class="metric">
-            <span class="metric-number">0</span>
-            <span class="metric-label">Vulnerabilities</span>
-        </div>
-        <div class="metric">
-            <span class="metric-number">3</span>
-            <span class="metric-label">Projects</span>
-        </div>
-        <div class="metric">
-            <span class="metric-number">CI</span>
-            <span class="metric-label">Green</span>
-        </div>
-    </div>
-</section>
-
-<section class="contact-section">
-    <h2>📬 Let's Connect</h2>
-    <p class="contact-blurb">
-        I'm currently open to full-stack and software engineering roles — remote or
-        hybrid (Greece / EU). If you'd like to talk about a role, a project, or just
-        tech in general, my inbox is always open.
-    </p>
-    <div class="contact-links">
-        <a href="mailto:AlexAdamos247@gmail.com" class="contact-link">
-            ✉️ Email
-        </a>
-        <a href="https://www.linkedin.com/in/alexandros-adamos-227961331/" target="_blank" class="contact-link">
-            💼 LinkedIn
-        </a>
-        <a href="https://github.com/Alex247Git" target="_blank" class="contact-link">
-            🐙 GitHub
-        </a>
-    </div>
-</section>
 
 <style>
     .footer-credit {
@@ -277,12 +279,20 @@ const myWork: PortfolioProps['myWork'] = {
         text-align: center;
     }
 
-    main.container section:first-of-type {
+    /* Hero is the first child of <main>; About/Contact now live in the
+       "above-footer" slot (outside <main>), so target children directly. */
+    main.container > :first-child {
         padding-top: 6rem;
     }
 
-    main.container section:last-of-type {
+    main.container > :last-child {
         padding-bottom: 4rem;
+    }
+
+    /* Content rendered above the footer band via Layout's "above-footer" slot */
+    .about-section,
+    .contact-section {
+        padding-inline: 2rem;
     }
 
     /* Footer band (className passed through FooterProps) */
